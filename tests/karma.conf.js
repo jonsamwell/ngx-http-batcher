@@ -1,5 +1,5 @@
 module.exports = function (config) {
-  config.set({
+  const cfg = {
     basePath: '',
     frameworks: ['jasmine'],
     files: [
@@ -10,7 +10,7 @@ module.exports = function (config) {
     preprocessors: {
       './main.js': ['webpack', 'sourcemap']
     },
-    webpack: require('./webpack-spec.config')({env: 'test'}),
+    webpack: require('./webpack-spec.config')({ env: 'test' }),
     reporters: ['progress'],
     port: 9876,
     colors: true,
@@ -19,5 +19,11 @@ module.exports = function (config) {
     browsers: ['Chrome'],
     singleRun: true,
     concurrency: Infinity
-  })
+  };
+
+  if (process.env.TRAVIS) {
+    cfg.browsers = ['Chrome_travis_ci'];
+  }
+
+  config.set(cfg);
 }
