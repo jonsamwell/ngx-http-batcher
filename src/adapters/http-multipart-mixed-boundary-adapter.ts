@@ -44,7 +44,7 @@ export class HttpMultipartMixedBoundaryAdapter implements IBatchHttpRequestAdapt
 
       // request's normal headers
       r.headers.forEach((values, name) => {
-        let header = `{name}:{values.join(",")}`;
+        let header = `${name}: ${values.join(",")}`;
         if (this.configuration.uniqueRequestName !== undefined &&
             name.toLowerCase().indexOf("content-disposition") > -1) {
           header += `; name=${this.configuration.uniqueRequestName}${i.toString()}`;

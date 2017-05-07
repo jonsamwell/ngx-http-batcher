@@ -1,11 +1,12 @@
 {
   "name": "ngx-http-batcher",
-  "version": "1.0.1",
-  "description": "",
+  "version": "1.0.2",
+  "description": "Angular (2+) HTTP batching module to reduce the number of HTTP requests and increase performance",
   "scripts": {
     "build": "./node_modules/.bin/ngc -p ./src",
     "test": "karma start ./tests/karma.conf.js",
-    "bundle": "npm run build && webpack && gulp compress && copy \"package.json\" \"dist/package.json\"",
+    "bundle": "npm run build && webpack && gulp compress",
+    "postbundle": "copy \"package.json\" \"dist/package.json\" && copy \"CHANGELOG.md\" \"dist/CHANGELOG.md\" && copy \"README.md\" \"dist/README.md\"",
     "lint": "tslint -c tslint.json \"src/**/*.ts\""
   },
   "keywords": [
