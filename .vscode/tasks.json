@@ -1,0 +1,11 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "command": "${workspaceRoot}/node_modules/.bin/ngc",
+    "isShellCommand": true,
+    "args": ["-p", "./src"],
+    "showOutput": "silent",
+    "problemMatcher": "$tsc",
+    "isBuildCommand": true
+}

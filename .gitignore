@@ -1,0 +1,17 @@
+.DS_Store
+Thumbs.db
+.project
+
+node_modules
+bower_components
+typings
+
+dist
+
+npm-debug.log
+debug.log
+
+tests/**/*.js
+tests/**/*.map.js
+!tests/unit/karma.conf.js
+!tests/unit/husky-config.js
