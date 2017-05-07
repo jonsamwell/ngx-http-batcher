@@ -1,11 +1,20 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
-    "version": "0.1.0",
+  "version": "0.1.0",
+  "tasks": [{
+    "taskName": "src build",
     "command": "${workspaceRoot}/node_modules/.bin/ngc",
     "isShellCommand": true,
     "args": ["-p", "./src"],
     "showOutput": "silent",
     "problemMatcher": "$tsc",
     "isBuildCommand": true
+  }, {
+    "taskName": "spec build",
+    "command": "tsc",
+    "isShellCommand": true,
+    "args": ["-p", "./tests/tsconfig-spec.json"],
+    "showOutput": "silent",
+    "problemMatcher": "$tsc",
+    "isBuildCommand": true
+  }]
 }

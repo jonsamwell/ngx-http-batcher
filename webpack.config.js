@@ -6,7 +6,6 @@ const webpack = require('webpack');
  */
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   devtool: 'source-map',

@@ -1,6 +1,6 @@
 {
   "name": "ngx-http-batcher",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "scripts": {
     "build": "./node_modules/.bin/ngc -p ./src",
@@ -25,7 +25,10 @@
   "module": "./index.js",
   "types": "./index.d.ts",
   "devDependencies": {
+    "@angular/common": "^4.1.1",
     "@angular/compiler-cli": "^4.1.1",
+    "@angular/platform-browser": "^4.1.1",
+    "@angular/platform-browser-dynamic": "^4.1.1",
     "@types/jasmine": "^2.5.47",
     "@types/node": "^7.0.18",
     "clean-webpack-plugin": "^0.1.16",
@@ -34,16 +37,19 @@
     "jasmine": "^2.6.0",
     "karma": "^1.6.0",
     "karma-chrome-launcher": "^2.0.0",
+    "karma-coverage": "^1.1.1",
     "karma-coverage-istanbul-reporter": "^1.2.0",
     "karma-jasmine": "^1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^2.0.3",
     "systemjs": "^0.20.12",
+    "ts-helpers": "^1.1.2",
     "ts-loader": "^2.0.3",
     "tslint": "^5.2.0",
     "tslint-loader": "^3.5.3",
     "typescript": "^2.3.2",
     "uglify-js": "^2.8.23",
-    "uglifyjs-webpack-plugin": "^0.4.3",
     "webpack": "^2.5.1"
   },
   "dependencies": {
