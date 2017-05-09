@@ -1,5 +1,4 @@
 # ngx-http-batcher
-=========================
 
 Angular (2+) HTTP batching module to reduce the number of HTTP requests and increase performance
 
@@ -15,6 +14,7 @@ Working demo https://plnkr.co/edit/OgvZ09iYO64VoXHLRGQa?p=preview
   - [Installation](#installation)
   - [Examples](#examples)
   - [Usage](#usage)
+- [Configuration](#configuration)
 
 ## <a name="get-started"></a> Get Started
 
@@ -57,7 +57,7 @@ export function httpBatchConfigurationFactory() {
 
 // Note the providers block where the Http class is being replaced by the HttpBatcher class.
 // This ensures that if you inject the Http service into something you actually get the
-// HttpBatcher class.
+// HttpBatcher class and batching becomes transparent to you.
 @NgModule({
   declarations: [
     AppComponent
