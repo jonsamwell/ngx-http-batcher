@@ -18,6 +18,17 @@ Working demo https://plnkr.co/edit/OgvZ09iYO64VoXHLRGQa?p=preview
   - [Endpoint Url](#config-endpointurl)
   - [Batch Endpoint Url](#config-batchurl)
   - [Enabled](#config-enabled)
+  - [Min Requests Per Batch](#config-minRequestsPerBatch)
+  - [Max Requests Per Batch](#config-maxRequestsPerBatch)
+  - [Batch Request Collection Delay Milliseconds](#config-batchRequestCollectionDelayMilliseconds)
+  - [Ignored Http Verbs](#config-ignoredHttpVerbs)
+  - [Send Cookies](#config-sendCookies)
+  - [Unique Request Name (content-dispositon header)](#config-uniqueRequestName)
+  - [Http Batching Adapter](#config-httpBatchingAdapter)
+  - [On Before Send Batch Request Handler](#config-onBeforeSendBatchRequest)
+- [.Net WebApi Configuation](#config-net)
+- [Configuring for Java Servlet <= 3.1](#config-javaservlet)
+
 
 ## <a name="get-started"></a> Get Started
 
@@ -53,7 +64,7 @@ import { AppComponent } from "./app.component";
 // Having this as an exported function enabled AOT complication as well :-)
 export function httpBatchConfigurationFactory() {
   return new HttpBatchConfigurationCollection([
-    // this is a basic configuration object see  [Configuration Object Options](#configuration) 
+    // this is a basic configuration object see [Configuration Object Options]
     // for more information on all the options
     new HttpBatchConfiguration({
       rootEndpointUrl: "https://api.myservice.com",
@@ -131,4 +142,57 @@ For example
 
 ### <a name="config-enabled"></a> Enabled
 This optional parameter defaults to true.  If false calls that would normally be batched to this endpoint will just be passed through as normal HTTP calls.
+
+### <a name="config-minRequestsPerBatch"></a> Min Requests Per Batch
+The minimum number of http requests that trigger a batch request to be sent.
+
+Http calls are batched into groups.  There is no point batching a single http call therefore the default smallest batch size is 2.
+
+### <a name="config-maxRequestsPerBatch"></a> Max Requests Per Batch
+The maximum number of http requests that can be batched in a single batch request.
+
+Http calls are batched into groups.  Batching hundreds of http calls into a single batch request might be unwise due to string processing times and the fact that you would not be taking advantage of being able to send to more than one http request to the same host of once.  Therefore, the default max batch size is 20.
+
+### <a name="config-batchRequestCollectionDelayMilliseconds"></a> Batch Request Collection Delay Milliseconds
+The period of time to wait in milliseconds between recieving the first http request and sending the batch.
+
+This is undoubtedly the most important option. As this module tries to be as transparent as possible to the user.
+
+The default time in milliseconds the http batcher should wait to collection all request to this domain after the first http call that can be batched has been collect. This defaults to 75ms. Therefore if you send a HTTP GET call that can be batched the HTTP batcher will receive this call and wait a further 75ms before sending the call in order to wait for other calls to the same domain in order to add them to the current batch request. If no other calls are collected the initial HTTP call will be allowed to continue as normal and will not be batched unless the config property - minRequestBatchSize is set to 2.
+
+### <a name="config-ignoredHttpVerbs"></a> Ignored Http Verbs
+Requests with these http verbs will be ignored and not form part of the batch.
+
+By default http requests with the verbs 'HEAD' & 'OPTIONS' are ignored.
+
+### <a name="config-sendCookies"></a> Send Cookies
+True to send cookies, defaults to false to reduce request size.
+
+If this is set to true cookies available on the document.cookie property will be set in each segment of a batch request. Note that only non HTTPOnly cookies will be sent as HTTPOnly cookies cannot be access by JavaScript because of security limitations.
+
+### <a name="config-uniqueRequestName"></a> Unique Request Name
+An optional parameter to set a unique parameter name on the Content-Disposition header. This requires the a 'Content-Disposition' header is first set on the initial request sending in a Content-Disposition header. Sample configuration:
+
+Some backend servers may require that each part be named in this manner. If the configuration above is used, then each part will have a header like this: Content-Disposition: form-data; name=batchRequest0
+
+If a Content-Disposition header is not added in the request then this parameter is silently ignored.
+
+## <a name="config-net"></a> Configuring .Net WebApi to accept batch requests
+
+This is really simple the web api team have done a really good job here. To enable batch request handling you just add a new route to your application and the rest is done for you! It's so easy I don't see any reason for you not to do it! See this link for a more detailed setup guide. Just add the below code to your web api configuration class and you are good to go!
+
+```
+configuration.Routes.MapHttpBatchRoute(
+        routeName:"batch",
+        routeTemplate:"api/batch",
+        batchHandler:new DefaultHttpBatchHandler(server));
+```
+
+## <a name="config-javaservlet"></a> Configuring for Java Servlet <= 3.1
+
+Java Servlet <= 3.1 parses multipart requests looking for the Content-Disposition header, expecting all multipart requests to include form data. It also expects a content disposition header per request part in the batch.
+
+Therefore you will need to setup the library to do this. Add a 'Content-Disposition' header of 'form-data' and set the 'Unique Request Name' configuration option.
+
+
 
