@@ -14,7 +14,7 @@ Working demo https://plnkr.co/edit/OgvZ09iYO64VoXHLRGQa?p=preview
   - [Installation](#installation)
   - [Examples](#examples)
   - [Usage](#usage)
-- [Configuration](#configuration)
+- [Configuration Object Options](#configuration)
   - [Endpoint Url](#config-endpointurl)
   - [Batch Endpoint Url](#config-batchurl)
   - [Enabled](#config-enabled)
@@ -53,6 +53,8 @@ import { AppComponent } from "./app.component";
 // Having this as an exported function enabled AOT complication as well :-)
 export function httpBatchConfigurationFactory() {
   return new HttpBatchConfigurationCollection([
+    // this is a basic configuration object see  [Configuration Object Options](#configuration) 
+    // for more information on all the options
     new HttpBatchConfiguration({
       rootEndpointUrl: "https://api.myservice.com",
       batchEndpointUrl: "https://api.myservice.com/$batch"
