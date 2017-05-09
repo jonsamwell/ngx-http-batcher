@@ -15,8 +15,6 @@ Working demo https://plnkr.co/edit/OgvZ09iYO64VoXHLRGQa?p=preview
   - [Installation](#installation)
   - [Examples](#examples)
   - [Usage](#usage)
-    - [angular-quickstart](#quickstart)
-    - [angular-seed](#seed)
 
 ## <a name="get-started"></a> Get Started
 
@@ -47,6 +45,8 @@ import { NgxHttpBatcherModule,
 
 import { AppComponent } from "./app.component";
 
+// Exported function so that HttpBatchConfigurationCollection can be used as in DI.
+// Having this as an exported function enabled AOT complication as well :-)
 export function httpBatchConfigurationFactory() {
   return new HttpBatchConfigurationCollection([
     new HttpBatchConfiguration({
@@ -55,6 +55,9 @@ export function httpBatchConfigurationFactory() {
     })]);
 };
 
+// Note the providers block where the Http class is being replaced by the HttpBatcher class.
+// This ensures that if you inject the Http service into something you actually get the
+// HttpBatcher class.
 @NgModule({
   declarations: [
     AppComponent
