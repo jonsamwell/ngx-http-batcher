@@ -184,7 +184,7 @@ This is really simple the web api team have done a really good job here. To enab
 ```
 configuration.Routes.MapHttpBatchRoute(
         routeName:"batch",
-        routeTemplate:"api/batch",
+        routeTemplate:"$batch",
         batchHandler:new DefaultHttpBatchHandler(server));
 ```
 
