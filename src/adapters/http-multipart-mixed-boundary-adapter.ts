@@ -120,7 +120,7 @@ export class HttpMultipartMixedBoundaryAdapter implements IBatchHttpRequestAdapt
               status = parseInt(lineParts[1], 10);
               statusText = lineParts.slice(2).join(HttpMultipartMixedBoundaryAdapter.SPACE);
             } else {
-              headers.append(lineParts[0].replace(":", HttpMultipartMixedBoundaryAdapter.EMPTY_STRING), lineParts[1]);
+              headers.append(lineParts[0].replace(":", HttpMultipartMixedBoundaryAdapter.EMPTY_STRING), header.substring(header.indexOf(HttpMultipartMixedBoundaryAdapter.SPACE)+1));
             }
           });
 
