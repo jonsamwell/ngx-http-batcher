@@ -25,6 +25,7 @@ Working demo https://plnkr.co/edit/OgvZ09iYO64VoXHLRGQa?p=preview
   - [Send Cookies](#config-sendCookies)
   - [Unique Request Name (content-dispositon header)](#config-uniqueRequestName)
   - [Http Batching Adapter](#config-httpBatchingAdapter)
+  - [Can Batch Request](#config-canBatchRequest)
   - [On Before Send Batch Request Handler](#config-onBeforeSendBatchRequest)
 - [.Net WebApi Configuation](#config-net)
 - [Configuring for Java Servlet <= 3.1](#config-javaservlet)

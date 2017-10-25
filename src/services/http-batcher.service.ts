@@ -38,18 +38,26 @@ export class HttpBatcher extends Http {
   public request(url: string | Request, options?: RequestOptionsArgs): Observable<Response> {
     const enpointUrl = url instanceof Request ? (url as Request).url : url;
     const configuration = this.batchingConfigurations.getConfigurationForUrl(enpointUrl);
-    if (this.canBatchRequest(configuration)) {
+    if (this.batchingEnabled(configuration)) {
       const request = url instanceof Request ?
         url as Request :
         new Request(this.mergeOptions(this._defaultOptions, options, RequestMethod.Get, url as string));
-      return this.batchRequest(request, configuration);
+      if (this.canBatchRequest(configuration, request)) {
+        return this.batchRequest(request, configuration);
+      } else {
+        return super.request(url, options);
+      }
     } else {
       return super.request(url, options);
     }
   }
 
-  protected canBatchRequest(configuration: HttpBatchConfiguration): boolean {
+  protected batchingEnabled(configuration: HttpBatchConfiguration): boolean {
     return configuration !== undefined && configuration.enabled;
+  }
+
+  protected canBatchRequest(configuration: HttpBatchConfiguration, request: Request): boolean {
+    return configuration.canBatchRequest(request);
   }
 
   protected batchRequest(request: Request, configuration: HttpBatchConfiguration): Observable<Response> {

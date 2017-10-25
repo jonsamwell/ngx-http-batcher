@@ -91,6 +91,14 @@ export interface IHttpBatchConfigurationOptions {
   httpBatchingAdapter?: WellKnownHttpBatchingAdapters | IBatchHttpRequestAdapter;
 
   /**
+   * An optional function which determines if the request can be batched
+   *
+   * @memberof IHttpBatchConfigurationOptions
+   * @type (request: Request) => boolean;
+   */
+  canBatchRequest?: (request: Request) => boolean;
+
+  /**
    * Lifecycle hook to modify the batch request just before it is sent.  This can be use to add aditional
    * headers to the request. eg: "Authorisation: Bearer ..."
    *
@@ -111,6 +119,7 @@ export class HttpBatchConfiguration {
   public uniqueRequestName: string;
   public sendCookies: boolean;
   public httpBatchingAdapter: WellKnownHttpBatchingAdapters | IBatchHttpRequestAdapter;
+  public canBatchRequest: (request: Request) => boolean;
   public onBeforeSendBatchRequest: (batchRequest: Request) => void;
 
   public constructor(options: IHttpBatchConfigurationOptions) {
@@ -124,6 +133,7 @@ export class HttpBatchConfiguration {
     this.uniqueRequestName = options.uniqueRequestName;
     this.sendCookies = options.sendCookies !== undefined ? options.sendCookies : false;
     this.httpBatchingAdapter = options.httpBatchingAdapter || WellKnownHttpBatchingAdapters.Http_MultipartMixed;
+    this.canBatchRequest = options.canBatchRequest || (() => true);
     // tslint:disable-next-line:no-empty
     this.onBeforeSendBatchRequest = options.onBeforeSendBatchRequest || (() => {});
   }
