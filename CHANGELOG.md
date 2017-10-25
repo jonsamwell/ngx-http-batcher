@@ -1,7 +1,9 @@
+1.07
+========
+Fixed deploy issue
 1.06
 ========
 Fixed deploy issue
-
 1.0.5
 ========
 Added ability to have fine grained control over the request that get batched by adding an optional canBatchRequest function on the configuration object.
