@@ -143,10 +143,20 @@ export class HttpMultipartMixedBoundaryAdapter implements IBatchHttpRequestAdapt
   private getUrlParts(url: string): { host: string; path: string, search: string } {
     const anchorElement = document.createElement("a");
     anchorElement.href = url;
+    // IE < 11 & Safari 11 seem to remove the proceeding '/' form urls
+    // which causings routing errors in web api
+    // https://localhost:44379/authentication/profile/current should be
+    // path: "/authentication/profile/current"
+    // in IE it is
+    // path: "authentication/profile/current"
     return {
       host: anchorElement.host,
-      path: anchorElement.pathname,
+      path: this.ensureLeadingBackSlash(anchorElement.pathname),
       search: anchorElement.search
     };
+  }
+
+  private ensureLeadingBackSlash(path: string): string {
+    return path[0] === "/" ? path : `/${path}`;
   }
 }

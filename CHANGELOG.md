@@ -1,9 +1,15 @@
+1.08
+========
+Fixed issue in IE11 that was stripping leading '/' on urls which in turned caused the routing in web api to fail.
+
 1.07
 ========
 Fixed deploy issue
+
 1.06
 ========
 Fixed deploy issue
+
 1.0.5
 ========
 Added ability to have fine grained control over the request that get batched by adding an optional canBatchRequest function on the configuration object.
