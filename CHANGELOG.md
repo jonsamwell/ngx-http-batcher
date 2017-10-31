@@ -1,7 +1,10 @@
+1.10
+========
+Redeploy due to deployment issues
+
 1.09
 ========
 Fixed deserialisation issue with asp web api when json content is formatted in batch request
-
 
 1.08
 ========

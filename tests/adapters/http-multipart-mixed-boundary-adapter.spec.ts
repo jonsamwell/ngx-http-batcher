@@ -38,6 +38,7 @@ describe("HttpMultipartMixedBoundaryAdapter", () => {
         "GET /users HTTP/1.1",
         "Host: api.abc.com",
         "Accept: application/json, text/plain, */*",
+        "Content-Type: text/plain",
         "",
         "",
         "--1494052623884--"
@@ -76,6 +77,7 @@ describe("HttpMultipartMixedBoundaryAdapter", () => {
         "Host: api.abc.com",
         "Accept: application/json, text/plain, */*",
         "Jon: Samwell",
+        "Content-Type: text/plain",
         "",
         "",
         "--1494052623884--"
@@ -115,6 +117,7 @@ describe("HttpMultipartMixedBoundaryAdapter", () => {
         "Host: api.abc.com",
         "Accept: application/json, text/plain, */*",
         "content-disposition: something; name=unique0",
+        "Content-Type: text/plain",
         "",
         "",
         "--1494052623884--"
