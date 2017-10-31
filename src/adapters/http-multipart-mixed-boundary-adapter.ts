@@ -1,10 +1,10 @@
-import { Headers, Request, RequestMethod, RequestOptions, Response,
-         ResponseOptions, ResponseType } from "@angular/http";
+import { Headers, Request, RequestMethod, RequestOptions,
+         Response, ResponseOptions, ResponseType } from "@angular/http";
 import { Observable } from "rxjs/Observable";
 import { HttpBatchConfiguration } from "../batch-configuration";
 import { IBatchHttpRequestAdapter } from "./batching-adapter";
 
-const XSSI_PREFIX = /^\)\]\}',?\n/;
+const XSSI_PREFIX = /^\)\]\}",?\n/;
 
 /**
  * See https://cloud.google.com/storage/docs/json_api/v1/how-tos/batch
@@ -42,7 +42,8 @@ export class HttpMultipartMixedBoundaryAdapter implements IBatchHttpRequestAdapt
         `Host: ${urlParts.host}`,
         `Accept: application/json, text/plain, */*`);
 
-      // request's normal headers
+      // request"s normal headers
+      this.setDetectedContentType(r);
       r.headers.forEach((values, name) => {
         let header = `${name}: ${values.join(",")}`;
         if (this.configuration.uniqueRequestName !== undefined &&
@@ -61,8 +62,12 @@ export class HttpMultipartMixedBoundaryAdapter implements IBatchHttpRequestAdapt
       const body = r.getBody(); // returns null if no body :-(
       // tslint:disable-next-line:no-null-keyword
       if (body !== null) {
-        bodyParts.push(body);
-        bodyParts.push(HttpMultipartMixedBoundaryAdapter.EMPTY_STRING);
+        if (r.detectContentTypeFromBody() === 1) {
+          // r.getBody pretty prints JSON which causes deserialisation errors in web api
+          bodyParts.push(JSON.stringify(JSON.parse(body)));
+        } else {
+          bodyParts.push(body);
+        }
       }
 
       bodyParts.push(HttpMultipartMixedBoundaryAdapter.EMPTY_STRING);
@@ -143,7 +148,7 @@ export class HttpMultipartMixedBoundaryAdapter implements IBatchHttpRequestAdapt
   private getUrlParts(url: string): { host: string; path: string, search: string } {
     const anchorElement = document.createElement("a");
     anchorElement.href = url;
-    // IE < 11 & Safari 11 seem to remove the proceeding '/' form urls
+    // IE < 11 & Safari 11 seem to remove the proceeding "/" form urls
     // which causings routing errors in web api
     // https://localhost:44379/authentication/profile/current should be
     // path: "/authentication/profile/current"
@@ -158,5 +163,35 @@ export class HttpMultipartMixedBoundaryAdapter implements IBatchHttpRequestAdapt
 
   private ensureLeadingBackSlash(path: string): string {
     return path[0] === "/" ? path : `/${path}`;
+  }
+
+  private setDetectedContentType(req: Request) {
+    // Skip if a custom Content-Type header is provided
+    if (req.headers != null && req.headers.get("Content-Type") != null) {
+      return;
+    }
+
+    let contentType: string;
+
+    // Set the detected content type
+    switch (req.detectContentType()) {
+      case 1:
+        contentType = "application/json";
+        break;
+      case 2:
+        contentType = "application/x-www-form-urlencoded;charset=UTF-8";
+        break;
+      case 5:
+        const blob = req.blob();
+        if (blob.type) {
+          contentType = blob.type;
+        }
+        break;
+      default:
+        contentType = "text/plain";
+        break;
+    }
+
+    req.headers.append("Content-Type", contentType);
   }
 }

@@ -1,3 +1,8 @@
+1.09
+========
+Fixed deserialisation issue with asp web api when json content is formatted in batch request
+
+
 1.08
 ========
 Fixed issue in IE11 that was stripping leading '/' on urls which in turned caused the routing in web api to fail.
